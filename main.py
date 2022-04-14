@@ -55,5 +55,5 @@ if __name__ == '__main__':
     create_json()
     new_image = np.asarray(new_image)
     img = numpy2pil(new_image)
-    img.show
+    img.show()
     
