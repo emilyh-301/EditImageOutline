@@ -13,11 +13,13 @@ def find_outline(path):
     width = im.size[0]
     height = im.size[1]
     new_image = []
-    outline_pixels = []
+    outline_pixels = [ [ [0,0,0] for x in range(width) ] for y in range(height) ]
     for x in range(width):
         for y in range(height):
             if pix[x,y] == WHITE:
                 outline_pixels.append([x,y])
+                new_image[x,y] = WHITE
+    return new_image
     #print(pix[x,y])  # Get the RGBA Value of the a pixel of an image
     #pix[x,y] = value  # Set the RGBA Value of the image (tuple)
 
@@ -49,6 +51,9 @@ def create_json():
 
 if __name__ == '__main__':
     picture = 'messi_labeled.jpg'
-    find_outline(picture)
+    new_image = find_outline(picture)
     create_json()
+    new_image = np.asarray(new_image)
+    img = numpy2pil(new_image)
+    img.show
     
