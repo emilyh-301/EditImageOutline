@@ -41,13 +41,10 @@ def pil2numpy(img: Image = None) -> np.ndarray:
         for y in range(height):
             count = 0
             for z in range(3):
-                # if np_array[x][y][z] == WHITE[z]: count += 1
-                # if count == 3:
-                #     np_array[x][y] = YELLOW
-                #     outline.append([x,y])
-                if np_array[x][y][z] != WHITE[z]: break
-            np_array[x][y] = YELLOW
-            outline.append([x,y])
+                if np_array[x][y][z] == WHITE[z]: count += 1
+                if count == 3:
+                    np_array[x][y] = YELLOW
+                    outline.append([x,y])
     print('test outline', len(outline))
     return np_array
 
@@ -69,7 +66,7 @@ def create_json():
 
 
 def test():
-    arr = pil2numpy()
+    arr = pil2numpy('test_image.png')
     #print('testing', arr[10][10])
     numpy2pil(arr).show()
 
