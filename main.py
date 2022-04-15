@@ -28,9 +28,18 @@ def pil2numpy(img: Image = None) -> np.ndarray:
     """
     Convert an HxW pixels RGB Image into an HxWx3 numpy ndarray
     """
+    WHITE = (255, 255, 255)
+    YELLOW = (255, 255, 0)
     if img is None:
         img = Image.open('messi_labeled.jpg')
     np_array = np.asarray(img)
+    s = np_array.shape
+    width = s[0]
+    height = s[1]
+    for x in range(width):
+        for y in range(height):
+            if np_array[x][y] == WHITE:
+                np_array[x][y] = YELLOW
     return np_array
 
 
