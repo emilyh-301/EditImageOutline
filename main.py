@@ -32,7 +32,7 @@ def pil2numpy(img: Image = None) -> np.ndarray:
     YELLOW = (255, 255, 0)
     outline = []
     if img is None:
-        img = Image.open('messi_labeled.jpg')
+        img = Image.open('test_image.png')
     np_array = np.asarray(img)
     s = np_array.shape
     width = s[0]
@@ -66,7 +66,7 @@ def create_json():
 
 
 def test():
-    arr = pil2numpy('test_image.png')
+    arr = pil2numpy()
     #print('testing', arr[10][10])
     numpy2pil(arr).show()
 
