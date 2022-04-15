@@ -5,20 +5,20 @@ from PIL import Image
 import numpy as np
 
 def find_outline(path):
-    WHITE = [255,255,255]
+    WHITE = (255,255,255)
 
     im = Image.open(path) # Can be many different formats.
     pix = im.load()
     # print(im.size)  # Get the width and height of the image for iterating over
     width = im.size[0]
     height = im.size[1]
-    new_image = []
-    outline_pixels = [ [ [0,0,0] for x in range(width) ] for y in range(height) ]
+    new_image = [ [ (255,0,0) for x in range(width) ] for y in range(height) ]
+    outline_pixels = []
     for x in range(width):
         for y in range(height):
-            if pix[x,y] == WHITE:
+            if pix[x][y] == WHITE:
                 outline_pixels.append([x,y])
-                new_image[x,y] = WHITE
+                new_image[x][y] = WHITE
     return new_image
     #print(pix[x,y])  # Get the RGBA Value of the a pixel of an image
     #pix[x,y] = value  # Set the RGBA Value of the image (tuple)
@@ -29,7 +29,7 @@ def pil2numpy(img: Image = None) -> np.ndarray:
     Convert an HxW pixels RGB Image into an HxWx3 numpy ndarray
     """
     if img is None:
-        img = Image.open('amsterdam_190x150.jpg')
+        img = Image.open('messi_labeled.jpg')
     np_array = np.asarray(img)
     return np_array
 
@@ -53,7 +53,8 @@ if __name__ == '__main__':
     picture = 'messi_labeled.jpg'
     new_image = find_outline(picture)
     create_json()
-    new_image = np.asarray(new_image)
+    new_image = np.ndarray(new_image)
+    print(new_image.shape)
     img = numpy2pil(new_image)
     img.show()
     
