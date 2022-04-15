@@ -55,6 +55,7 @@ def test():
 
 
 if __name__ == '__main__':
+    test()
     picture = 'messi_labeled.jpg'
     new_image = find_outline(picture)
     create_json()
