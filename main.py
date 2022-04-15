@@ -30,6 +30,7 @@ def pil2numpy(img: Image = None) -> np.ndarray:
     """
     WHITE = (255, 255, 255)
     YELLOW = (255, 255, 0)
+    outline = []
     if img is None:
         img = Image.open('messi_labeled.jpg')
     np_array = np.asarray(img)
@@ -38,10 +39,13 @@ def pil2numpy(img: Image = None) -> np.ndarray:
     height = s[1]
     for x in range(width):
         for y in range(height):
+            count = 0
             for z in range(3):
-                if np_array[x][y][z] != WHITE[z]:
-                    break
-                np_array[x][y] = YELLOW
+                if np_array[x][y][z] == WHITE[z]: count += 1
+                if count == 3:
+                    np_array[x][y] = YELLOW
+                    outline.append([x,y])
+    print('test outline', len(outline))
     return np_array
 
 
@@ -63,7 +67,7 @@ def create_json():
 
 def test():
     arr = pil2numpy()
-    print('testing', arr[10][10])
+    #print('testing', arr[10][10])
     numpy2pil(arr).show()
 
 
@@ -73,7 +77,7 @@ if __name__ == '__main__':
     new_image = find_outline(picture)
     create_json()
     new_image = np.asarray(new_image)
-    print('new image', new_image[10][10])
+    #print('new image', new_image[10][10])
     img = numpy2pil(new_image)
-    img.show()
+    #img.show()
     
