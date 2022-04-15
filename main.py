@@ -41,10 +41,13 @@ def pil2numpy(img: Image = None) -> np.ndarray:
         for y in range(height):
             count = 0
             for z in range(3):
-                if np_array[x][y][z] == WHITE[z]: count += 1
-                if count == 3:
-                    np_array[x][y] = YELLOW
-                    outline.append([x,y])
+                # if np_array[x][y][z] == WHITE[z]: count += 1
+                # if count == 3:
+                #     np_array[x][y] = YELLOW
+                #     outline.append([x,y])
+                if np_array[x][y][z] != WHITE[z]: break
+            np_array[x][y] = YELLOW
+            outline.append([x,y])
     print('test outline', len(outline))
     return np_array
 
