@@ -51,6 +51,7 @@ def create_json():
 
 def test():
     arr = pil2numpy()
+    print(arr[1][1])
     numpy2pil(arr).show()
 
 
@@ -59,7 +60,7 @@ if __name__ == '__main__':
     picture = 'messi_labeled.jpg'
     new_image = find_outline(picture)
     create_json()
-    new_image = np.ndarray(new_image)
+    new_image = np.asarray(new_image)
     #print(new_image.shape)
     img = numpy2pil(new_image)
     img.show()
