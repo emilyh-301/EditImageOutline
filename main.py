@@ -16,7 +16,7 @@ def find_outline(path):
     outline_pixels = []
     for x in range(width):
         for y in range(height):
-            if pix[x][y] == WHITE:
+            if pix[x,y] == WHITE:
                 outline_pixels.append([x,y])
                 new_image[x][y] = WHITE
     return new_image
@@ -49,12 +49,17 @@ def create_json():
     pass
 
 
+def test():
+    arr = pil2numpy()
+    numpy2pil(arr).show()
+
+
 if __name__ == '__main__':
     picture = 'messi_labeled.jpg'
     new_image = find_outline(picture)
     create_json()
     new_image = np.ndarray(new_image)
-    print(new_image.shape)
+    #print(new_image.shape)
     img = numpy2pil(new_image)
     img.show()
     
