@@ -12,7 +12,7 @@ def find_outline(path):
     # print(im.size)  # Get the width and height of the image for iterating over
     width = im.size[0]
     height = im.size[1]
-    new_image = [ [ (255,0,0) for x in range(width) ] for y in range(height) ]
+    new_image = [ [ (255,255,0) for x in range(width) ] for y in range(height) ]
     outline_pixels = []
     for x in range(width):
         for y in range(height):
@@ -51,7 +51,7 @@ def create_json():
 
 def test():
     arr = pil2numpy()
-    print(arr[1][1])
+    print(arr[10][10])
     numpy2pil(arr).show()
 
 
