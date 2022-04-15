@@ -38,7 +38,9 @@ def pil2numpy(img: Image = None) -> np.ndarray:
     height = s[1]
     for x in range(width):
         for y in range(height):
-            if np_array[x][y] == WHITE:
+            for z in range(3):
+                if np_array[x][y][z] != WHITE[z]:
+                    break
                 np_array[x][y] = YELLOW
     return np_array
 
@@ -53,6 +55,7 @@ def numpy2pil(np_array: np.ndarray) -> Image:
     assert np_array.shape[2] == 3, assert_msg
     img = Image.fromarray(np_array, 'RGB')
     return img
+
 
 def create_json():
     pass
