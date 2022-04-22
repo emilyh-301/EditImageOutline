@@ -4,10 +4,11 @@ import os.path
 from PIL import Image
 import numpy as np
 
+
 def find_outline(path):
     WHITE = (255,255,255)
 
-    im = Image.open(path) # Can be many different formats.
+    im = Image.open(path)  # Can be different formats.
     pix = im.load()
     # print(im.size)  # Get the width and height of the image for iterating over
     width = im.size[0]
@@ -19,12 +20,13 @@ def find_outline(path):
             if pix[x,y] == WHITE:
                 outline_pixels.append([x,y])
                 new_image[x][y] = WHITE
-    return new_image
+    return new_image, outline_pixels
     #print(pix[x,y])  # Get the RGBA Value of the a pixel of an image
     #pix[x,y] = value  # Set the RGBA Value of the image (tuple)
 
+
 # https://stackoverflow.com/questions/49271913/convert-numpy-array-to-rgb-image
-def pil2numpy(img: Image = None) -> np.ndarray:
+def pil2numpy(img: Image = None):
     """
     Convert an HxW pixels RGB Image into an HxWx3 numpy ndarray
     """
@@ -32,7 +34,7 @@ def pil2numpy(img: Image = None) -> np.ndarray:
     YELLOW = (255, 255, 0)
     outline = []
     if img is None:
-        img = Image.open('test_image.png')
+        img = Image.open('test_image1.png')
     np_array = np.asarray(img)
     s = np_array.shape
     width = s[0]
@@ -46,7 +48,7 @@ def pil2numpy(img: Image = None) -> np.ndarray:
                     np_array[x][y] = YELLOW
                     outline.append([x,y])
     print('test outline', len(outline))
-    return np_array
+    return np_array, outline
 
 
 def numpy2pil(np_array: np.ndarray) -> Image:
@@ -61,12 +63,19 @@ def numpy2pil(np_array: np.ndarray) -> Image:
     return img
 
 
-def create_json():
-    pass
+def create_json(outline):
+    '''Input is a list of pixels that are part of the image outline
+    and the output is a string of those pixels in json format'''
+    json_string = '['
+    for i in range(len(outline)-1):
+        json_string += '{"x":' + str(outline[i][0]) + ', "y":' + str(outline[i][1]) + '},'
+    json_string += '{"x":' + str(outline[len(outline)-1][0]) + ', "y":' + str(outline[len(outline)-1][1]) + '}]'
+    return json_string
 
 
 def test():
-    arr = pil2numpy()
+    arr, outline = pil2numpy()
+    create_json(outline)
     #print('testing', arr[10][10])
     numpy2pil(arr).show()
 
@@ -74,8 +83,8 @@ def test():
 if __name__ == '__main__':
     test()
     picture = 'messi_labeled.jpg'
-    new_image = find_outline(picture)
-    create_json()
+    new_image, outline1 = find_outline(picture)
+    create_json(outline1)
     new_image = np.asarray(new_image)
     #print('new image', new_image[10][10])
     img = numpy2pil(new_image)
