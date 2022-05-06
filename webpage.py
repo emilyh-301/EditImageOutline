@@ -6,7 +6,7 @@ from os import path
 
 my_host_name = 'localhost'
 my_port = 5000
-my_html_folder_path = '\\'
+my_html_folder_path = ''
 my_home_page_file_path = 'my_web_page.html'
 
 
@@ -15,10 +15,10 @@ class MyHttpRequestHandler(http.server.SimpleHTTPRequestHandler):
     def _set_headers(self):
         self.send_response(200)
         self.send_header('Content-Type', 'text/html')
-        self.send_header('Content-Length', path.getsize(self.getPath()))
+        #self.send_header('Content-Length', str(path.getsize(self.getPath())))
         self.end_headers()
 
-    def getPath(self):
+    def getPath(self) :
         if self.path == '/':
             content_path = path.join(
                 my_html_folder_path, my_home_page_file_path)

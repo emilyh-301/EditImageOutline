@@ -19,7 +19,7 @@
 
     <link rel="stylesheet" href="/css/bootstrap.css" />
     <link rel="stylesheet" href="/css/styles.css" />
-    <link rel="stylesheet" href="css/font-awesome/all.css" />
+    <!--<link rel="stylesheet" href="css/font-awesome/all.css" /> -->
     <!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
     <script rel="script" src="/js/bootstrap.bundle.js"></script> -->
 
@@ -73,7 +73,7 @@
     </style>
 
 </head>
-<body style="background-color: #BBBBFF " > <!--#bbe2fa, OR dodgerblue; background-image: linear-gradient(0deg, dodgerblue, white)" -->
+<body style="background-color: #BBBBFF" onload="init()" > <!--#bbe2fa, OR dodgerblue; background-image: linear-gradient(0deg, dodgerblue, white)" -->
 
     <!-- navbar code here -->
     <div>
@@ -81,7 +81,7 @@
         <div class="container-fluid">
             <div style="float:left" class="navbar-nav">
                 <a class="navbar-brand" href="#">
-                    <!-- <img src="logo2.JPG" alt="special education advocate logo" width="115" height="70"> -->
+                     <!-- could add image here -->
                 </a>
             </div>
             <a id="web-title" class="navbar-brand" style="color:#000000" href="#"> </a>
@@ -100,15 +100,37 @@
 
     <div id="body-div">
 
-        <h1> Edit polygon on the image </h1>
-        <!-- <h3> Please be patient while this website is under construction, thank you! </h3> -->
-        <p> Just in the testing phase right now </p>
+        <div>
+            <h1> Edit image web-app </h1>
+            <p> Just in the testing phase right now </p>
+<!--            <img id="blah" src="test_image1.png" alt="logo" width="115" height="70" float="right" />-->
+        </div>
 
-        <canvas id="myCanvas" width="400" height="400"> </canvas>
-        <script>
-            var canvas = document.getElementById("myCanvas");
-            var ctx = canvas.getContext("2d");
-        </script>
+        <div>
+            Select pen color:
+            <button type="button" class="btn" style="background-color:black" id="black" onclick="color(this)"> </button>
+            <button type="button" class="btn" style="background-color:red" id="red" onclick="color(this)"> </button>
+            <button type="button" class="btn" style="background-color:orange" id="orange" onclick="color(this)"> </button>
+            <button type="button" class="btn" style="background-color:yellow" id="yellow" onclick="color(this)"> </button>
+            <button type="button" class="btn" style="background-color:green" id="green" onclick="color(this)"> </button>
+            <button type="button" class="btn" style="background-color:blue" id="blue" onclick="color(this)"> </button>
+            <button type="button" class="btn" style="background-color:purple" id="purple" onclick="color(this)"> </button>
+            <button type="button" class="btn" style="background-color:pink" id="pink" onclick="color(this)"> </button>
+            <button type="button" class="btn" style="background-color:white" id="white" onclick="color(this)"> </button>
+            <br>
+            Set pen width:
+<!--            <div class="slidecontainer">-->
+                <input type="range" min="2" max="12" value="4" class="slider" id="penWidthSlider">
+<!--            </div>-->
+            Value: <span id="displayPenWidth"></span>
+        </div>
+
+        <canvas id="myCanvas" width="400" height="400" style="background-color:white"> </canvas>
+        <img id="canvasimg" src="test_image1.png" style="display:none;" />
+<!--        <script>-->
+<!--            var canvas = document.getElementById("myCanvas");-->
+<!--            var ctx = canvas.getContext("2d");-->
+<!--        </script>-->
 
         <!--<button type="button" class="btn btn-primary">Primary</button>
         <button type="button" class="btn btn-secondary">Secondary</button>
@@ -120,16 +142,18 @@
         <button type="button" class="btn btn-dark">Dark</button>-->
 
         <div>
-            <button type="button" id="save-btn" onclick="save()" value="save" class="btn btn-dark">Save</button>
+            <input id="myFile" type='file' onchange="readURL(this);" />
+            <button type="button" id="display-btn" onclick="save()" value="" class="btn btn-dark">Display selected image</button>
             <button type="button" id="clear" onclick="erase()" class="btn btn-dark">Clear</button>
+            <a id="download" download="myImage.jpg" href="" onclick="download_img(this);">Download to myImage.jpg</a>
         </div>
 
 
     </div>
 
-    <footer id="footer"> Made by Emily </footer>
+    <footer id="footer"> Made by Emily Haigh </footer>
 
-</body>
+
 
 <script>
     const { Button } = require("../wwwroot/lib/bootstrap/dist/js/bootstrap.bundle");
@@ -144,23 +168,22 @@
             context.drawImage(img, 10, 10);
         };
     }
-    function save() {
-    document.getElementById("canvasimg").style.border = "2px solid";
-    var dataURL = canvas.toDataURL();
-    document.getElementById("canvasimg").src = dataURL;
-    document.getElementById("canvasimg").style.display = "inline";
-    }
+
     var canvas, ctx, flag = false,
         prevX = 0,
         currX = 0,
         prevY = 0,
         currY = 0,
+        penWidth = 4,
+        x = "red",
         dot_flag = false;
+
     function init() {
         canvas = document.getElementById('myCanvas');
         ctx = canvas.getContext("2d");
         w = canvas.width;
         h = canvas.height;
+        penWidth = 4;
 
         canvas.addEventListener("mousemove", function (e) {
             findxy('move', e)
@@ -175,12 +198,37 @@
             findxy('out', e)
         }, false);
     }
+
+    function save() {
+        var myFile = document.getElementById("myFile");
+        ctx.clearRect(0, 0, w, h);
+        var img = new Image()
+        img.src = myFile.src;
+        ctx.drawImage(img, 0, 0);
+    }
+
+    download_img = function(element) {
+        // get image URI from canvas object
+        var imageURI = canvas.toDataURL("image/jpg");
+        element.href = imageURI;
+        canvas.toBlob(function(blob) {
+            saveAs(blob, "pretty image.png");
+        })
+    };
+    var slider = document.getElementById("penWidthSlider");
+    var displayValue = document.getElementById("displayPenWidth");
+    displayValue.innerHTML = slider.value;
+
+    slider.oninput = function() {
+       penWidth = this.value;
+       displayValue.innerHTML = this.value;
+    }
     function draw() {
         ctx.beginPath();
         ctx.moveTo(prevX, prevY);
         ctx.lineTo(currX, currY);
-        ctx.strokeStyle = '#0022DD';
-        ctx.lineWidth = 2;
+        ctx.strokeStyle = x;
+        ctx.lineWidth = penWidth;
         ctx.stroke();
         ctx.closePath();
     }
@@ -201,7 +249,7 @@
             dot_flag = true;
             if (dot_flag) {
                 ctx.beginPath();
-                ctx.fillStyle = '#0022DD';
+                ctx.fillStyle = x;
                 ctx.fillRect(currX, currY, 2, 2);
                 ctx.closePath();
                 dot_flag = false;
@@ -220,7 +268,60 @@
             }
         }
     }
+        function color(obj) {
+        switch (obj.id) {
+            case "green":
+                x = "green";
+                break;
+            case "blue":
+                x = "blue";
+                break;
+            case "red":
+                x = "red";
+                break;
+            case "yellow":
+                x = "yellow";
+                break;
+            case "orange":
+                x = "orange";
+                break;
+            case "purple":
+                x = "purple";
+                break;
+            case "white":
+                x = "white";
+                break;
+            case "pink":
+                x = "pink";
+                break;
+            case "black":
+                x = "black";
+                break;
+        }
+    }
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#blah')
+                    .attr('src', e.target.result)
+                    .width(150)
+                    .height(200);
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    window.onload = function() {
+      var canvas = document.getElementById("myCanvas");
+      var ctx = canvas.getContext("2d");
+      var img = new Image()
+      img.src = "menuIcon.png";
+      ctx.drawImage(img, 0, 0);
+    };
 
 </script>
-
+</body>
 </html>
+
