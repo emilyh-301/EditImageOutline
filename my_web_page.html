@@ -123,14 +123,19 @@
                 <input type="range" min="2" max="12" value="4" class="slider" id="penWidthSlider">
 <!--            </div>-->
             Value: <span id="displayPenWidth"></span>
+            <script>
+                var slider = document.getElementById("penWidthSlider");
+                var displayValue = document.getElementById("displayPenWidth");
+                displayValue.innerHTML = slider.value;
+                slider.oninput = function() {
+                   penWidth = this.value;
+                   displayValue.innerHTML = this.value;
+                }
+            </script>
         </div>
 
         <canvas id="myCanvas" width="400" height="400" style="background-color:white"> </canvas>
         <img id="canvasimg" src="test_image1.png" style="display:none;" />
-<!--        <script>-->
-<!--            var canvas = document.getElementById("myCanvas");-->
-<!--            var ctx = canvas.getContext("2d");-->
-<!--        </script>-->
 
         <!--<button type="button" class="btn btn-primary">Primary</button>
         <button type="button" class="btn btn-secondary">Secondary</button>
@@ -142,12 +147,27 @@
         <button type="button" class="btn btn-dark">Dark</button>-->
 
         <div>
-            <input id="myFile" type='file' onchange="readURL(this);" />
-            <button type="button" id="display-btn" onclick="save()" value="" class="btn btn-dark">Display selected image</button>
+            <input id="myFile" type='file' accept="image/*" onchange="display(event);" />
+            <button type="button" id="display-btn" onclick="display(this)" value="" class="btn btn-dark">Display selected image</button>
             <button type="button" id="clear" onclick="erase()" class="btn btn-dark">Clear</button>
-            <a id="download" download="myImage.jpg" href="" onclick="download_img(this);">Download to myImage.jpg</a>
+            <a id="download" download="myImage.jpg" href="" onchange="display(event)" onclick="download_img(this);">Download to myImage.jpg</a>
         </div>
 
+        <script>
+            function display(event) {
+                var img = new Image();
+                ctx.clearRect(0, 0, w, h);
+                var reader = new FileReader();
+                reader.onload = function(){
+                  img.src = reader.result;
+                };
+                reader.readAsDataURL(event.target.files[0]);
+                // img.src = "dog.jpg"; // URL.createObjectURL(event.target.files[0]);
+                img.width = document.getElementById("myCanvas").width;
+                img.height = document.getElementById("myCanvas").height;
+                ctx.drawImage(img, 0, 0);
+            }
+        </script>
 
     </div>
 
@@ -183,6 +203,8 @@
         ctx = canvas.getContext("2d");
         w = canvas.width;
         h = canvas.height;
+        slider = document.getElementById("penWidthSlider");
+        displayValue = document.getElementById("displayPenWidth");
         penWidth = 4;
 
         canvas.addEventListener("mousemove", function (e) {
@@ -199,25 +221,14 @@
         }, false);
     }
 
-    function save() {
-        var myFile = document.getElementById("myFile");
-        ctx.clearRect(0, 0, w, h);
-        var img = new Image()
-        img.src = myFile.src;
-        ctx.drawImage(img, 0, 0);
-    }
-
     download_img = function(element) {
         // get image URI from canvas object
         var imageURI = canvas.toDataURL("image/jpg");
         element.href = imageURI;
-        canvas.toBlob(function(blob) {
-            saveAs(blob, "pretty image.png");
-        })
+        // canvas.toBlob(function(blob) {
+        //     saveAs(blob, "pretty image.png");
+        // })
     };
-    var slider = document.getElementById("penWidthSlider");
-    var displayValue = document.getElementById("displayPenWidth");
-    displayValue.innerHTML = slider.value;
 
     slider.oninput = function() {
        penWidth = this.value;
@@ -268,7 +279,7 @@
             }
         }
     }
-        function color(obj) {
+    function color(obj) {
         switch (obj.id) {
             case "green":
                 x = "green";
@@ -312,14 +323,6 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
-
-    window.onload = function() {
-      var canvas = document.getElementById("myCanvas");
-      var ctx = canvas.getContext("2d");
-      var img = new Image()
-      img.src = "menuIcon.png";
-      ctx.drawImage(img, 0, 0);
-    };
 
 </script>
 </body>
