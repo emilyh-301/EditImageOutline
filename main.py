@@ -34,7 +34,7 @@ def pil2numpy(img: Image = None):
     YELLOW = (255, 255, 0)
     outline = []
     if img is None:
-        img = Image.open('test_image1.png')
+        img = Image.open('test.png')
     np_array = np.asarray(img)
     s = np_array.shape
     width = s[0]
@@ -73,6 +73,15 @@ def create_json(outline):
     return json_string
 
 
+def addPixelsToTxt(outline):
+    file = open('pixels.txt', 'w')
+    for i in range(len(outline)-1):
+        s = str(outline[i][0]) + ' ' + str(outline[i][1]) + '\n'
+        file.write(s)
+    file.close()
+
+
+
 def test():
     arr, outline = pil2numpy()
     create_json(outline)
@@ -82,9 +91,10 @@ def test():
 
 if __name__ == '__main__':
     test()
-    picture = 'messi_labeled.jpg'
+    picture = 'test.png'
     new_image, outline1 = find_outline(picture)
     create_json(outline1)
+    addPixelsToTxt(outline1)
     new_image = np.asarray(new_image)
     #print('new image', new_image[10][10])
     img = numpy2pil(new_image)
