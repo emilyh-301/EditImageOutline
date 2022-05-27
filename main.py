@@ -43,6 +43,7 @@ def pil2numpy(img: Image = None):
         for y in range(height):
             count = 0
             for z in range(3):
+                # if this pixel is white, change it to yellow
                 if np_array[x][y][z] == WHITE[z]: count += 1
                 if count == 3:
                     np_array[x][y] = YELLOW
@@ -81,7 +82,6 @@ def addPixelsToTxt(outline):
     file.close()
 
 
-
 def test():
     arr, outline = pil2numpy()
     create_json(outline)
@@ -96,7 +96,6 @@ if __name__ == '__main__':
     create_json(outline1)
     addPixelsToTxt(outline1)
     new_image = np.asarray(new_image)
-    #print('new image', new_image[10][10])
     img = numpy2pil(new_image)
     #img.show()
     

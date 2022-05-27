@@ -103,7 +103,6 @@
         <div>
             <h1> Edit image web-app </h1>
             <p> Just in the testing phase right now </p>
-<!--            <img id="blah" src="test_image1.png" alt="logo" width="115" height="70" float="right" />-->
         </div>
 
         <div>
@@ -119,9 +118,7 @@
             <button type="button" class="btn" style="background-color:white" id="white" onclick="color(this)"> </button>
             <br>
             Set pen width:
-<!--            <div class="slidecontainer">-->
-                <input type="range" min="2" max="12" value="4" class="slider" id="penWidthSlider">
-<!--            </div>-->
+                <input type="range" min="2" max="16" value="4" class="slider" id="penWidthSlider">
             Value: <span id="displayPenWidth"></span>
             <script>
                 var slider = document.getElementById("penWidthSlider");
@@ -148,13 +145,20 @@
 
         <div>
             <input id="myFile" type='file' accept="image/*" onchange="display(event);" />
-            <button type="button" id="display-btn" onclick="display(this)" value="" class="btn btn-dark">Display selected image</button>
+            <button type="button" id="display-btn" onclick="display2()" value="" class="btn btn-dark">Display selected image</button>
             <button type="button" id="clear" onclick="erase()" class="btn btn-dark">Clear</button>
             <a id="download" download="myImage.jpg" href="" onchange="display(event)" onclick="download_img(this);">Download to myImage.jpg</a>
         </div>
 
         <script>
-            function display(event) {
+            function display2() {  // with hard coded image file
+                var img = new Image();
+                img.src = "test.png";
+                img.width = document.getElementById("myCanvas").width;
+                img.height = document.getElementById("myCanvas").height;
+                ctx.drawImage(img, 0, 0);
+            }
+            function display(event) {  // this does not work ??
                 var img = new Image();
                 ctx.clearRect(0, 0, w, h);
                 var reader = new FileReader();
@@ -162,7 +166,8 @@
                   img.src = reader.result;
                 };
                 reader.readAsDataURL(event.target.files[0]);
-                // img.src = "dog.jpg"; // URL.createObjectURL(event.target.files[0]);
+                img.src = "dog.jpg";
+                 URL.createObjectURL(event.target.files[0]);
                 img.width = document.getElementById("myCanvas").width;
                 img.height = document.getElementById("myCanvas").height;
                 ctx.drawImage(img, 0, 0);
